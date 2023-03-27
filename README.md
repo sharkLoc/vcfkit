@@ -1,4 +1,4 @@
-# fqkit
+# vcfkit
 🦀 a simple program for vcf/bcf file manipulation
 
 ## install
