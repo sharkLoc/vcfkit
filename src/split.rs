@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::format};
+use std::collections::HashMap;
 use std::path::Path;
 
 use rust_htslib::{
