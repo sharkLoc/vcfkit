@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::format};
 use std::path::Path;
 
 use rust_htslib::{
@@ -17,16 +17,20 @@ pub fn split_by_chr(
     };
     let header = Header::from_template(&bcf.header());
     let mut chr_hash = HashMap::new();
+
     for rec in bcf.records() {
         let chr: String = if let Ok(ref record) = rec {
             let name = String::from_utf8(record.header().rid2name(record.rid().unwrap())?.to_vec())
                 .unwrap();
-            chr_hash.entry(name.clone()).or_insert(Writer::from_path(
-                Path::new(&format!("{}/{}.vcf.gz", outdir, name)),
-                &header,
-                false,
-                Format::Vcf,
-            )?);
+            if !chr_hash.contains_key(&name){
+                let writer = Writer::from_path(
+                    Path::new(&format!("{}/{}.vcf.gz", outdir, name)),
+                    &header, 
+                    false,
+                    Format::Vcf,
+                );
+                chr_hash.insert(name.clone(), writer);
+            }
             name
         } else {
             eprintln!(
@@ -36,7 +40,8 @@ pub fn split_by_chr(
             std::process::exit(1);
         };
         if let Some(bcf_writer) = chr_hash.get_mut(&chr) {
-            bcf_writer.write(&rec?)?;
+            //if let Ok(w) = bcf_writer {  w.write(&rec?)?; }
+            bcf_writer.as_mut().unwrap().write(&rec?)?;
         }
     }
     Ok(())

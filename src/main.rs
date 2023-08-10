@@ -13,7 +13,7 @@ use concat::*;
 #[derive(Parser, Debug)]
 #[command(
     author = "size_t",
-    version = "version 0.1",
+    version = "version 0.1.1",
     about = "vcfkit: a simple program for vcf/bcf file manipulation",
     long_about = "vcfkit: a simple program for vcf/bcf file manipulation\nrepo: https::github.com/sharkLoc/vcfkit.git\nemail: dwood8146@gmail.com"
 )]
